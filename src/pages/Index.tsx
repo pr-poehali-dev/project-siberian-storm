@@ -176,10 +176,10 @@ export default function Index() {
       <header className="header">
         <div className="logo">СЕЗОН</div>
         <nav>
-          <a href="#">Меню</a>
-          <a href="#">О нас</a>
-          <a href="#">Доставка</a>
-          <a href="#">Контакты</a>
+          <a href="#menu">Меню</a>
+          <a href="#about">О нас</a>
+          <a href="#delivery">Доставка</a>
+          <a href="#about">Контакты</a>
         </nav>
         <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
           <a href="tel:+79500736888" className="btn-cta" style={{ textDecoration: "none" }}>+7 950 073-68-88</a>
@@ -513,11 +513,78 @@ export default function Index() {
             <p className="vibe-text">
               Мы готовим по-настоящему: живой огонь, вок, никаких полуфабрикатов. Каждое блюдо собрано из свежих ингредиентов прямо перед доставкой. Привезём горячим — или вернём деньги.
             </p>
-            <button className="btn-cta" style={{ background: "var(--dark)", color: "white", borderColor: "white" }}>
+            <a href="#about" className="btn-cta" style={{ background: "var(--dark)", color: "white", borderColor: "white", textDecoration: "none", display: "inline-block" }}>
               О нас
-            </button>
+            </a>
           </div>
           <div className="vibe-img"></div>
+        </section>
+
+        {/* О нас */}
+        <section className="section-padding" id="about">
+          <div className="section-header">
+            <h2 className="section-title">О НАС</h2>
+          </div>
+          <div style={{ display: "grid", gridTemplateColumns: "1fr", gap: "40px", marginTop: "8px" }}>
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))", gap: "24px" }}>
+              {[
+                { icon: "MapPin", title: "Адрес", text: "мкрн Университетский, 43" },
+                { icon: "Phone", title: "Телефон", text: "+7 950 073-68-88", href: "tel:+79500736888" },
+                { icon: "Users", title: "Залы", text: "VIP-зал, общий зал, зал для банкетов" },
+                { icon: "UtensilsCrossed", title: "Кухня", text: "Настоящая китайская кухня — живой огонь, вок, свежие ингредиенты" },
+              ].map((card) => (
+                <div key={card.title} style={{ border: "var(--border)", padding: "28px 24px", background: "white" }}>
+                  <div style={{ marginBottom: "12px" }}>
+                    <Icon name={card.icon} size={28} />
+                  </div>
+                  <h4 style={{ fontWeight: 800, textTransform: "uppercase", fontSize: "13px", letterSpacing: "0.05em", marginBottom: "8px" }}>{card.title}</h4>
+                  {card.href ? (
+                    <a href={card.href} style={{ color: "var(--dark)", textDecoration: "none", fontSize: "15px", fontWeight: 600 }}>{card.text}</a>
+                  ) : (
+                    <p style={{ color: "#555", fontSize: "15px", lineHeight: 1.5 }}>{card.text}</p>
+                  )}
+                </div>
+              ))}
+            </div>
+            <div style={{ background: "var(--dark)", color: "white", padding: "36px 40px", display: "flex", flexDirection: "column", gap: "12px" }}>
+              <p style={{ fontSize: "13px", fontWeight: 800, textTransform: "uppercase", letterSpacing: "0.1em", color: "#aaa" }}>Забронировать столик</p>
+              <p style={{ fontFamily: "'Playfair Display', serif", fontSize: "28px", fontWeight: 700, lineHeight: 1.3 }}>
+                Звоните и бронируйте — VIP-зал, общий зал или банкетный
+              </p>
+              <a href="tel:+79500736888" className="btn-cta" style={{ background: "var(--primary)", color: "white", textDecoration: "none", display: "inline-flex", alignItems: "center", justifyContent: "center", marginTop: "8px", width: "fit-content" }}>
+                +7 950 073-68-88
+              </a>
+            </div>
+          </div>
+        </section>
+
+        {/* Доставка */}
+        <section className="section-padding" id="delivery" style={{ background: "#fafafa" }}>
+          <div className="section-header">
+            <h2 className="section-title">ДОСТАВКА</h2>
+          </div>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))", gap: "24px", marginTop: "8px" }}>
+            {[
+              { district: "Свердловский район", min: "от 2 000 ₽", icon: "MapPin" },
+              { district: "Октябрьский район", min: "от 2 500 ₽", icon: "MapPin" },
+              { district: "Ленинский и другие районы", min: "от 3 000 ₽", icon: "MapPin" },
+            ].map((zone, i) => (
+              <div key={i} style={{ border: "var(--border)", background: "white", padding: "28px 24px", position: "relative", overflow: "hidden" }}>
+                <div style={{ position: "absolute", top: 0, left: 0, width: "4px", height: "100%", background: "var(--primary)" }} />
+                <p style={{ fontWeight: 800, fontSize: "16px", marginBottom: "10px" }}>{zone.district}</p>
+                <p style={{ fontFamily: "'Playfair Display', serif", fontSize: "26px", fontWeight: 700, color: "var(--secondary)" }}>{zone.min}</p>
+                <p style={{ color: "#888", fontSize: "13px", marginTop: "6px" }}>минимальная сумма заказа</p>
+              </div>
+            ))}
+          </div>
+          <div style={{ marginTop: "32px", display: "flex", gap: "16px", flexWrap: "wrap" }}>
+            <a href="tel:+79500736888" className="btn-cta" style={{ background: "var(--primary)", color: "white", textDecoration: "none", display: "inline-flex", alignItems: "center", justifyContent: "center" }}>
+              Позвонить и заказать
+            </a>
+            <a href={`https://t.me/+79500736888`} target="_blank" rel="noopener noreferrer" className="btn-cta" style={{ background: "white", textDecoration: "none", display: "inline-flex", alignItems: "center", justifyContent: "center" }}>
+              Написать в Telegram
+            </a>
+          </div>
         </section>
 
         <section className="section-padding">
@@ -563,10 +630,10 @@ export default function Index() {
         <div className="footer-links">
           <h4>Навигация</h4>
           <ul>
-            <li><a href="#" style={{ color: "inherit", textDecoration: "none" }}>Меню</a></li>
-            <li><a href="#" style={{ color: "inherit", textDecoration: "none" }}>О нас</a></li>
-            <li><a href="#" style={{ color: "inherit", textDecoration: "none" }}>Доставка</a></li>
-            <li><a href="#" style={{ color: "inherit", textDecoration: "none" }}>Контакты</a></li>
+            <li><a href="#menu" style={{ color: "inherit", textDecoration: "none" }}>Меню</a></li>
+            <li><a href="#about" style={{ color: "inherit", textDecoration: "none" }}>О нас</a></li>
+            <li><a href="#delivery" style={{ color: "inherit", textDecoration: "none" }}>Доставка</a></li>
+            <li><a href="#about" style={{ color: "inherit", textDecoration: "none" }}>Контакты</a></li>
           </ul>
         </div>
         <div className="footer-links">
