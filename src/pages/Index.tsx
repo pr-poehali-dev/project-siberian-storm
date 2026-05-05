@@ -23,7 +23,7 @@ export default function Index() {
               КИТАЙ <span>на дом</span>
             </h1>
             <p className="text-base md:text-lg lg:text-xl mb-8 md:mb-10 leading-relaxed text-[#555]">
-              Рецепты из провинции Сычуань и Кантон. Горячее прямо из вока — доставляем за 45 минут по городу.
+              Рецепты из провинции Сычуань и Кантон. Горячее прямо из вока — доставляем за 1,5 часа по городу.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 sm:gap-5">
               <a href="tel:+79500736888" className="btn-cta" style={{ background: "var(--primary)", color: "white", textDecoration: "none", display: "inline-flex", alignItems: "center", justifyContent: "center" }}>
