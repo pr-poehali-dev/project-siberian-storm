@@ -183,7 +183,15 @@ export default function Admin() {
           <div style={{ fontSize: "22px", fontWeight: 800, letterSpacing: "0.05em" }}>СЕЗОН — Загрузка фото</div>
           <div style={{ color: "#aaa", fontSize: "13px", marginTop: "4px" }}>Загружено {uploaded} из {total} блюд</div>
         </div>
-        <a href="/" style={{ color: "#aaa", fontSize: "13px", textDecoration: "none" }}>← На сайт</a>
+        <div style={{ display: "flex", gap: "16px", alignItems: "center" }}>
+          <a href="/" style={{ color: "#aaa", fontSize: "13px", textDecoration: "none" }}>← На сайт</a>
+          <button
+            onClick={() => { sessionStorage.removeItem("admin_ok"); setAuth(false); }}
+            style={{ background: "transparent", border: "1px solid #555", color: "#aaa", fontSize: "13px", padding: "6px 14px", cursor: "pointer" }}
+          >
+            Выйти
+          </button>
+        </div>
       </div>
 
       <div style={{ maxWidth: "960px", margin: "0 auto", padding: "32px 16px" }}>
