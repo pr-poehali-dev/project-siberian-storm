@@ -264,6 +264,33 @@ export default function Index() {
                         <td style={{ padding: "12px 8px 12px 20px", textAlign: "right", whiteSpace: "nowrap" }}>
                           <span className="price" style={{ fontSize: "18px" }}>{item.price} ₽</span>
                         </td>
+                        <td style={{ padding: "12px 0 12px 12px", textAlign: "right", whiteSpace: "nowrap" }}>
+                          <a
+                            href={`tel:+79500736888`}
+                            style={{
+                              display: "inline-block",
+                              padding: "6px 14px",
+                              background: "var(--primary)",
+                              color: "white",
+                              fontWeight: 800,
+                              fontSize: "12px",
+                              textTransform: "uppercase",
+                              textDecoration: "none",
+                              border: "2px solid var(--primary)",
+                              transition: "0.2s",
+                            }}
+                            onMouseEnter={e => {
+                              (e.currentTarget as HTMLAnchorElement).style.background = "white";
+                              (e.currentTarget as HTMLAnchorElement).style.color = "var(--primary)";
+                            }}
+                            onMouseLeave={e => {
+                              (e.currentTarget as HTMLAnchorElement).style.background = "var(--primary)";
+                              (e.currentTarget as HTMLAnchorElement).style.color = "white";
+                            }}
+                          >
+                            Заказать
+                          </a>
+                        </td>
                       </tr>
                     ))}
                   </tbody>
