@@ -26,9 +26,9 @@ export default function Index() {
               Рецепты из провинции Сычуань и Кантон. Горячее прямо из вока — доставляем за 45 минут по городу.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 sm:gap-5">
-              <button className="btn-cta" style={{ background: "var(--primary)", color: "white" }}>
+              <a href="tel:+79500736888" className="btn-cta" style={{ background: "var(--primary)", color: "white", textDecoration: "none", display: "inline-flex", alignItems: "center", justifyContent: "center" }}>
                 Заказать доставку
-              </button>
+              </a>
               <button className="btn-cta" style={{ background: "white" }}>
                 Смотреть меню
               </button>
