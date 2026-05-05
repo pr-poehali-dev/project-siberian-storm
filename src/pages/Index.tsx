@@ -238,6 +238,8 @@ export default function Index() {
         <div className="footer-links">
           <h4>Контакты</h4>
           <ul>
+            <li>Иркутск, мкр. Университетский, 43</li>
+            <li>Ежедневно: 10:00 – 23:00</li>
             <li><a href="tel:+79500736888" style={{ color: "inherit", textDecoration: "none" }}>+7 950 073-68-88</a></li>
             <li><a href="mailto:sezonk@list.ru" style={{ color: "inherit", textDecoration: "none" }}>sezonk@list.ru</a></li>
 
