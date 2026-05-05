@@ -4,7 +4,7 @@ export default function Index() {
       <div className="grain-overlay" />
 
       <header className="header">
-        <div className="logo">WOKHOUSE</div>
+        <div className="logo">СЕЗОН</div>
         <nav>
           <a href="#">Меню</a>
           <a href="#">О нас</a>
@@ -163,7 +163,7 @@ export default function Index() {
 
         <section className="section-padding">
           <h2 className="section-title" style={{ marginBottom: "40px", textAlign: "center" }}>
-            @WOKHOUSE
+            @СЕЗОН
           </h2>
           <div className="social-grid">
             <div className="social-item">
@@ -196,7 +196,7 @@ export default function Index() {
 
       <footer>
         <div>
-          <div className="footer-logo">WOKHOUSE</div>
+          <div className="footer-logo">СЕЗОН</div>
           <p style={{ color: "#666", lineHeight: 1.6 }}>
             Кафе китайской кухни с доставкой по городу. Настоящий вкус Востока — прямо к вашей двери.
           </p>
