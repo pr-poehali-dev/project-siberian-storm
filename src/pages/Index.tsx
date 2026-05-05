@@ -229,8 +229,7 @@ export default function Index() {
         <div className="footer-links">
           <h4>Доставка</h4>
           <ul>
-            <li>Пн–Пт: 11:00 – 23:00</li>
-            <li>Сб–Вс: 11:00 – 00:00</li>
+            <li>Ежедневно: 10:00 – 23:00</li>
             <li>Минимальный заказ: 500 ₽</li>
             <li>Доставка от 45 мин</li>
           </ul>
