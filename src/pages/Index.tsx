@@ -131,6 +131,7 @@ export default function Index() {
   const [activeCategory, setActiveCategory] = useState("all");
   const [cart, setCart] = useState<CartItem[]>([]);
   const [cartOpen, setCartOpen] = useState(false);
+  const [address, setAddress] = useState("");
 
   const filtered = activeCategory === "all"
     ? menuData
@@ -159,7 +160,8 @@ export default function Index() {
 
   const sendToTelegram = () => {
     const lines = cart.map((c) => `• ${c.code} ${c.name} (${c.weight}) × ${c.qty} = ${c.price * c.qty} ₽`);
-    const text = `Здравствуйте! Хочу заказать:\n\n${lines.join("\n")}\n\nИтого: ${totalPrice} ₽`;
+    const addressLine = address.trim() ? `\n\nАдрес доставки: ${address.trim()}` : "";
+    const text = `Здравствуйте! Хочу заказать:\n\n${lines.join("\n")}\n\nИтого: ${totalPrice} ₽${addressLine}`;
     window.open(`https://t.me/+79500736888?text=${encodeURIComponent(text)}`, "_blank");
   };
 
@@ -265,6 +267,25 @@ export default function Index() {
 
             {cart.length > 0 && (
               <div style={{ padding: "20px 24px", borderTop: "var(--border)" }}>
+                <div style={{ marginBottom: "16px" }}>
+                  <label style={{ display: "block", fontWeight: 800, fontSize: "12px", textTransform: "uppercase", marginBottom: "6px", letterSpacing: "0.05em" }}>
+                    Адрес доставки
+                  </label>
+                  <input
+                    type="text"
+                    value={address}
+                    onChange={(e) => setAddress(e.target.value)}
+                    placeholder="Улица, дом, квартира"
+                    style={{
+                      width: "100%",
+                      padding: "10px 12px",
+                      border: "var(--border)",
+                      fontSize: "14px",
+                      outline: "none",
+                      boxSizing: "border-box",
+                    }}
+                  />
+                </div>
                 <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "16px" }}>
                   <span style={{ fontWeight: 800, fontSize: "16px", textTransform: "uppercase" }}>Итого</span>
                   <span style={{ fontFamily: "'Playfair Display', serif", fontWeight: 700, fontSize: "22px", color: "var(--secondary)" }}>{totalPrice} ₽</span>
