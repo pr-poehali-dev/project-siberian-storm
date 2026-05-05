@@ -240,16 +240,7 @@ export default function Index() {
           <ul>
             <li><a href="tel:+79500736888" style={{ color: "inherit", textDecoration: "none" }}>+7 950 073-68-88</a></li>
             <li><a href="mailto:sezonk@list.ru" style={{ color: "inherit", textDecoration: "none" }}>sezonk@list.ru</a></li>
-            <li>
-              <a href="#" style={{ color: "inherit", textDecoration: "none" }}>
-                ВКонтакте
-              </a>
-            </li>
-            <li>
-              <a href="#" style={{ color: "inherit", textDecoration: "none" }}>
-                Telegram
-              </a>
-            </li>
+
           </ul>
         </div>
       </footer>
