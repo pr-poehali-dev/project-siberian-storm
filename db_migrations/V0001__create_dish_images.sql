@@ -1,0 +1,5 @@
+CREATE TABLE IF NOT EXISTS dish_images (
+  code VARCHAR(20) PRIMARY KEY,
+  image_url TEXT NOT NULL,
+  updated_at TIMESTAMP DEFAULT NOW()
+);

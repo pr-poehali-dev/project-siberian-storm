@@ -1,0 +1,10 @@
+{
+  "tests": [
+    {
+      "name": "Get all dish images",
+      "method": "GET",
+      "path": "/",
+      "expectedStatus": 200
+    }
+  ]
+}

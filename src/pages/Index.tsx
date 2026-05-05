@@ -1,5 +1,7 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Icon from "@/components/ui/icon";
+
+const GET_IMAGES_URL = "https://functions.poehali.dev/4b896819-afe5-4c96-a50d-801300e96afe";
 
 type CartItem = {
   code: string;
@@ -134,6 +136,14 @@ export default function Index() {
   const [address, setAddress] = useState("");
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
+  const [dishImages, setDishImages] = useState<Record<string, string>>({});
+
+  useEffect(() => {
+    fetch(GET_IMAGES_URL)
+      .then(r => r.json())
+      .then(data => setDishImages(data.images || {}))
+      .catch(() => {});
+  }, []);
 
   const filtered = activeCategory === "all"
     ? menuData
@@ -456,6 +466,15 @@ export default function Index() {
                           background: idx % 2 === 0 ? "white" : "#fafafa",
                         }}
                       >
+                        <td style={{ padding: "8px 8px 8px 0", width: "56px" }}>
+                          {dishImages[item.code] ? (
+                            <img src={dishImages[item.code]} alt={item.name} style={{ width: "52px", height: "52px", objectFit: "cover", display: "block" }} />
+                          ) : (
+                            <div style={{ width: "52px", height: "52px", background: "#f0f0f0", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                              <Icon name="UtensilsCrossed" size={18} />
+                            </div>
+                          )}
+                        </td>
                         <td style={{ padding: "12px 8px", color: "#999", fontSize: "12px", fontWeight: 700, width: "60px" }}>
                           {item.code}
                         </td>
