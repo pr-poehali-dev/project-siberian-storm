@@ -239,7 +239,7 @@ export default function Index() {
           <h4>Контакты</h4>
           <ul>
             <li><a href="tel:+79500736888" style={{ color: "inherit", textDecoration: "none" }}>+7 950 073-68-88</a></li>
-            <li>info@wokhouse.ru</li>
+            <li><a href="mailto:sezonk@list.ru" style={{ color: "inherit", textDecoration: "none" }}>sezonk@list.ru</a></li>
             <li>
               <a href="#" style={{ color: "inherit", textDecoration: "none" }}>
                 ВКонтакте
