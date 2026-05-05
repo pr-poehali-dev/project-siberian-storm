@@ -3,6 +3,7 @@ import Icon from "@/components/ui/icon";
 
 const UPLOAD_URL = "https://functions.poehali.dev/5d4ec8f3-3da0-45c3-8c6a-caf0e9387a4d";
 const GET_URL = "https://functions.poehali.dev/4b896819-afe5-4c96-a50d-801300e96afe";
+const ADMIN_PASSWORD = "Qwerty38";
 
 const menuData = [
   { id: "1", category: "Салаты", items: [
@@ -91,6 +92,9 @@ const menuData = [
 ];
 
 export default function Admin() {
+  const [auth, setAuth] = useState(sessionStorage.getItem("admin_ok") === "1");
+  const [pwInput, setPwInput] = useState("");
+  const [pwError, setPwError] = useState(false);
   const [images, setImages] = useState<Record<string, string>>({});
   const [uploading, setUploading] = useState<Record<string, boolean>>({});
   const [success, setSuccess] = useState<Record<string, boolean>>({});
@@ -98,10 +102,48 @@ export default function Admin() {
   const fileInputs = useRef<Record<string, HTMLInputElement | null>>({});
 
   useEffect(() => {
+    if (!auth) return;
     fetch(GET_URL)
       .then(r => r.json())
       .then(data => setImages(data.images || {}));
-  }, []);
+  }, [auth]);
+
+  const handleLogin = () => {
+    if (pwInput === ADMIN_PASSWORD) {
+      sessionStorage.setItem("admin_ok", "1");
+      setAuth(true);
+      setPwError(false);
+    } else {
+      setPwError(true);
+    }
+  };
+
+  if (!auth) {
+    return (
+      <div style={{ minHeight: "100vh", background: "#111", display: "flex", alignItems: "center", justifyContent: "center" }}>
+        <div style={{ background: "white", padding: "40px 36px", width: "320px" }}>
+          <div style={{ fontWeight: 800, fontSize: "20px", letterSpacing: "0.05em", marginBottom: "8px" }}>СЕЗОН</div>
+          <div style={{ color: "#888", fontSize: "13px", marginBottom: "28px" }}>Введите пароль для входа в админ-панель</div>
+          <input
+            type="password"
+            value={pwInput}
+            onChange={e => { setPwInput(e.target.value); setPwError(false); }}
+            onKeyDown={e => e.key === "Enter" && handleLogin()}
+            placeholder="Пароль"
+            autoFocus
+            style={{ width: "100%", padding: "12px", border: `2px solid ${pwError ? "#c8372d" : "#ddd"}`, fontSize: "15px", outline: "none", boxSizing: "border-box", marginBottom: "8px" }}
+          />
+          {pwError && <div style={{ color: "#c8372d", fontSize: "13px", marginBottom: "8px" }}>Неверный пароль</div>}
+          <button
+            onClick={handleLogin}
+            style={{ width: "100%", padding: "12px", background: "#111", color: "white", border: "none", fontWeight: 700, fontSize: "14px", cursor: "pointer", marginTop: "4px" }}
+          >
+            Войти
+          </button>
+        </div>
+      </div>
+    );
+  }
 
   const handleFileChange = async (code: string, file: File) => {
     setUploading(prev => ({ ...prev, [code]: true }));
