@@ -132,6 +132,8 @@ export default function Index() {
   const [cart, setCart] = useState<CartItem[]>([]);
   const [cartOpen, setCartOpen] = useState(false);
   const [address, setAddress] = useState("");
+  const [name, setName] = useState("");
+  const [phone, setPhone] = useState("");
 
   const filtered = activeCategory === "all"
     ? menuData
@@ -160,8 +162,10 @@ export default function Index() {
 
   const sendToTelegram = () => {
     const lines = cart.map((c) => `• ${c.code} ${c.name} (${c.weight}) × ${c.qty} = ${c.price * c.qty} ₽`);
-    const addressLine = address.trim() ? `\n\nАдрес доставки: ${address.trim()}` : "";
-    const text = `Здравствуйте! Хочу заказать:\n\n${lines.join("\n")}\n\nИтого: ${totalPrice} ₽${addressLine}`;
+    const addressLine = address.trim() ? `\nАдрес доставки: ${address.trim()}` : "";
+    const nameLine = name.trim() ? `\nИмя: ${name.trim()}` : "";
+    const phoneLine = phone.trim() ? `\nТелефон: ${phone.trim()}` : "";
+    const text = `Здравствуйте! Хочу заказать:\n\n${lines.join("\n")}\n\nИтого: ${totalPrice} ₽${addressLine}${nameLine}${phoneLine}`;
     window.open(`https://t.me/+79500736888?text=${encodeURIComponent(text)}`, "_blank");
   };
 
@@ -267,6 +271,28 @@ export default function Index() {
 
             {cart.length > 0 && (
               <div style={{ padding: "20px 24px", borderTop: "var(--border)" }}>
+                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "12px", marginBottom: "12px" }}>
+                  <div>
+                    <label style={{ display: "block", fontWeight: 800, fontSize: "12px", textTransform: "uppercase", marginBottom: "6px", letterSpacing: "0.05em" }}>Имя</label>
+                    <input
+                      type="text"
+                      value={name}
+                      onChange={(e) => setName(e.target.value)}
+                      placeholder="Ваше имя"
+                      style={{ width: "100%", padding: "10px 12px", border: "var(--border)", fontSize: "14px", outline: "none", boxSizing: "border-box" }}
+                    />
+                  </div>
+                  <div>
+                    <label style={{ display: "block", fontWeight: 800, fontSize: "12px", textTransform: "uppercase", marginBottom: "6px", letterSpacing: "0.05em" }}>Телефон</label>
+                    <input
+                      type="tel"
+                      value={phone}
+                      onChange={(e) => setPhone(e.target.value)}
+                      placeholder="+7 900 000-00-00"
+                      style={{ width: "100%", padding: "10px 12px", border: "var(--border)", fontSize: "14px", outline: "none", boxSizing: "border-box" }}
+                    />
+                  </div>
+                </div>
                 <div style={{ marginBottom: "16px" }}>
                   <label style={{ display: "block", fontWeight: 800, fontSize: "12px", textTransform: "uppercase", marginBottom: "6px", letterSpacing: "0.05em" }}>
                     Адрес доставки
