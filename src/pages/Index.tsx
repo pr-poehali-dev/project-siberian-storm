@@ -266,7 +266,9 @@ export default function Index() {
                         </td>
                         <td style={{ padding: "12px 0 12px 12px", textAlign: "right", whiteSpace: "nowrap" }}>
                           <a
-                            href={`tel:+79500736888`}
+                            href={`https://t.me/+79500736888?text=${encodeURIComponent(`Здравствуйте! Хочу заказать: ${item.code} ${item.name} (${item.weight}) — ${item.price} ₽`)}`}
+                            target="_blank"
+                            rel="noopener noreferrer"
                             style={{
                               display: "inline-block",
                               padding: "6px 14px",
