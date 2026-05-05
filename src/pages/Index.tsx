@@ -11,7 +11,7 @@ export default function Index() {
           <a href="#">Доставка</a>
           <a href="#">Контакты</a>
         </nav>
-        <button className="btn-cta">Заказать</button>
+        <a href="tel:+79500736888" className="btn-cta" style={{ textDecoration: "none" }}>+7 950 073-68-88</a>
       </header>
 
       <main>
@@ -238,7 +238,7 @@ export default function Index() {
         <div className="footer-links">
           <h4>Контакты</h4>
           <ul>
-            <li>+7 (800) 000-00-00</li>
+            <li><a href="tel:+79500736888" style={{ color: "inherit", textDecoration: "none" }}>+7 950 073-68-88</a></li>
             <li>info@wokhouse.ru</li>
             <li>
               <a href="#" style={{ color: "inherit", textDecoration: "none" }}>
