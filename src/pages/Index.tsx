@@ -1,4 +1,13 @@
 import { useState } from "react";
+import Icon from "@/components/ui/icon";
+
+type CartItem = {
+  code: string;
+  name: string;
+  weight: string;
+  price: number;
+  qty: number;
+};
 
 const menuData = [
   {
@@ -120,10 +129,39 @@ const menuData = [
 
 export default function Index() {
   const [activeCategory, setActiveCategory] = useState("all");
+  const [cart, setCart] = useState<CartItem[]>([]);
+  const [cartOpen, setCartOpen] = useState(false);
 
   const filtered = activeCategory === "all"
     ? menuData
     : menuData.filter((c) => c.id === activeCategory);
+
+  const addToCart = (item: { code: string; name: string; weight: string; price: number }) => {
+    setCart((prev) => {
+      const existing = prev.find((c) => c.code === item.code);
+      if (existing) return prev.map((c) => c.code === item.code ? { ...c, qty: c.qty + 1 } : c);
+      return [...prev, { ...item, qty: 1 }];
+    });
+  };
+
+  const removeFromCart = (code: string) => {
+    setCart((prev) => prev.filter((c) => c.code !== code));
+  };
+
+  const changeQty = (code: string, delta: number) => {
+    setCart((prev) =>
+      prev.map((c) => c.code === code ? { ...c, qty: Math.max(1, c.qty + delta) } : c)
+    );
+  };
+
+  const totalPrice = cart.reduce((sum, c) => sum + c.price * c.qty, 0);
+  const totalCount = cart.reduce((sum, c) => sum + c.qty, 0);
+
+  const sendToTelegram = () => {
+    const lines = cart.map((c) => `• ${c.code} ${c.name} (${c.weight}) × ${c.qty} = ${c.price * c.qty} ₽`);
+    const text = `Здравствуйте! Хочу заказать:\n\n${lines.join("\n")}\n\nИтого: ${totalPrice} ₽`;
+    window.open(`https://t.me/+79500736888?text=${encodeURIComponent(text)}`, "_blank");
+  };
 
   return (
     <>
@@ -137,8 +175,127 @@ export default function Index() {
           <a href="#">Доставка</a>
           <a href="#">Контакты</a>
         </nav>
-        <a href="tel:+79500736888" className="btn-cta" style={{ textDecoration: "none" }}>+7 950 073-68-88</a>
+        <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
+          <a href="tel:+79500736888" className="btn-cta" style={{ textDecoration: "none" }}>+7 950 073-68-88</a>
+          <button
+            onClick={() => setCartOpen(true)}
+            style={{
+              position: "relative",
+              background: "var(--dark)",
+              color: "white",
+              border: "none",
+              padding: "10px 14px",
+              cursor: "pointer",
+              display: "flex",
+              alignItems: "center",
+              gap: "6px",
+              fontWeight: 800,
+              fontSize: "13px",
+            }}
+          >
+            <Icon name="ShoppingCart" size={18} />
+            {totalCount > 0 && (
+              <span style={{
+                position: "absolute",
+                top: "-6px",
+                right: "-6px",
+                background: "var(--primary)",
+                color: "white",
+                borderRadius: "50%",
+                width: "20px",
+                height: "20px",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                fontSize: "11px",
+                fontWeight: 900,
+              }}>{totalCount}</span>
+            )}
+          </button>
+        </div>
       </header>
+
+      {/* Cart Drawer */}
+      {cartOpen && (
+        <div style={{ position: "fixed", inset: 0, zIndex: 1000, display: "flex", justifyContent: "flex-end" }}>
+          <div onClick={() => setCartOpen(false)} style={{ position: "absolute", inset: 0, background: "rgba(0,0,0,0.4)" }} />
+          <div style={{
+            position: "relative",
+            width: "100%",
+            maxWidth: "420px",
+            background: "white",
+            height: "100%",
+            display: "flex",
+            flexDirection: "column",
+            borderLeft: "var(--border)",
+            zIndex: 1,
+          }}>
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "20px 24px", borderBottom: "var(--border)" }}>
+              <h3 style={{ fontFamily: "'Playfair Display', serif", fontSize: "20px", fontWeight: 700, textTransform: "uppercase" }}>Корзина</h3>
+              <button onClick={() => setCartOpen(false)} style={{ background: "none", border: "none", cursor: "pointer" }}>
+                <Icon name="X" size={22} />
+              </button>
+            </div>
+
+            <div style={{ flex: 1, overflowY: "auto", padding: "16px 24px" }}>
+              {cart.length === 0 ? (
+                <p style={{ color: "#999", textAlign: "center", marginTop: "40px" }}>Корзина пуста</p>
+              ) : (
+                cart.map((item) => (
+                  <div key={item.code} style={{ display: "flex", alignItems: "center", gap: "12px", borderBottom: "1px solid #eee", paddingBottom: "14px", marginBottom: "14px" }}>
+                    <div style={{ flex: 1 }}>
+                      <div style={{ fontWeight: 700, fontSize: "14px" }}>{item.name}</div>
+                      <div style={{ color: "#888", fontSize: "12px" }}>{item.weight} · {item.price} ₽/шт</div>
+                    </div>
+                    <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+                      <button onClick={() => changeQty(item.code, -1)} style={{ width: "26px", height: "26px", border: "var(--border)", background: "white", cursor: "pointer", fontWeight: 900, fontSize: "16px", display: "flex", alignItems: "center", justifyContent: "center" }}>−</button>
+                      <span style={{ fontWeight: 700, minWidth: "20px", textAlign: "center" }}>{item.qty}</span>
+                      <button onClick={() => changeQty(item.code, 1)} style={{ width: "26px", height: "26px", border: "var(--border)", background: "white", cursor: "pointer", fontWeight: 900, fontSize: "16px", display: "flex", alignItems: "center", justifyContent: "center" }}>+</button>
+                    </div>
+                    <div style={{ fontFamily: "'Playfair Display', serif", fontWeight: 700, fontSize: "16px", color: "var(--secondary)", minWidth: "70px", textAlign: "right" }}>
+                      {item.price * item.qty} ₽
+                    </div>
+                    <button onClick={() => removeFromCart(item.code)} style={{ background: "none", border: "none", cursor: "pointer", color: "#bbb" }}>
+                      <Icon name="Trash2" size={16} />
+                    </button>
+                  </div>
+                ))
+              )}
+            </div>
+
+            {cart.length > 0 && (
+              <div style={{ padding: "20px 24px", borderTop: "var(--border)" }}>
+                <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "16px" }}>
+                  <span style={{ fontWeight: 800, fontSize: "16px", textTransform: "uppercase" }}>Итого</span>
+                  <span style={{ fontFamily: "'Playfair Display', serif", fontWeight: 700, fontSize: "22px", color: "var(--secondary)" }}>{totalPrice} ₽</span>
+                </div>
+                <button
+                  onClick={sendToTelegram}
+                  style={{
+                    width: "100%",
+                    padding: "14px",
+                    background: "var(--primary)",
+                    color: "white",
+                    border: "none",
+                    fontWeight: 900,
+                    fontSize: "14px",
+                    textTransform: "uppercase",
+                    cursor: "pointer",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    gap: "8px",
+                    letterSpacing: "0.05em",
+                  }}
+                >
+                  <Icon name="Send" size={16} />
+                  Отправить заказ в Telegram
+                </button>
+              </div>
+            )}
+          </div>
+        </div>
+      )}
 
       <main>
         <section className="hero">
@@ -265,33 +422,34 @@ export default function Index() {
                           <span className="price" style={{ fontSize: "18px" }}>{item.price} ₽</span>
                         </td>
                         <td style={{ padding: "12px 0 12px 12px", textAlign: "right", whiteSpace: "nowrap" }}>
-                          <a
-                            href={`https://t.me/+79500736888?text=${encodeURIComponent(`Здравствуйте! Хочу заказать: ${item.code} ${item.name} (${item.weight}) — ${item.price} ₽`)}`}
-                            target="_blank"
-                            rel="noopener noreferrer"
+                          <button
+                            onClick={() => { addToCart(item); setCartOpen(true); }}
                             style={{
-                              display: "inline-block",
                               padding: "6px 14px",
                               background: "var(--primary)",
                               color: "white",
                               fontWeight: 800,
                               fontSize: "12px",
                               textTransform: "uppercase",
-                              textDecoration: "none",
                               border: "2px solid var(--primary)",
+                              cursor: "pointer",
                               transition: "0.2s",
+                              display: "inline-flex",
+                              alignItems: "center",
+                              gap: "5px",
                             }}
                             onMouseEnter={e => {
-                              (e.currentTarget as HTMLAnchorElement).style.background = "white";
-                              (e.currentTarget as HTMLAnchorElement).style.color = "var(--primary)";
+                              (e.currentTarget as HTMLButtonElement).style.background = "white";
+                              (e.currentTarget as HTMLButtonElement).style.color = "var(--primary)";
                             }}
                             onMouseLeave={e => {
-                              (e.currentTarget as HTMLAnchorElement).style.background = "var(--primary)";
-                              (e.currentTarget as HTMLAnchorElement).style.color = "white";
+                              (e.currentTarget as HTMLButtonElement).style.background = "var(--primary)";
+                              (e.currentTarget as HTMLButtonElement).style.color = "white";
                             }}
                           >
-                            Заказать
-                          </a>
+                            <Icon name="Plus" size={13} />
+                            В корзину
+                          </button>
                         </td>
                       </tr>
                     ))}
