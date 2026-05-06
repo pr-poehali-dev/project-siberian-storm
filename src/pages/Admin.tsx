@@ -99,7 +99,10 @@ export default function Admin() {
   const [uploading, setUploading] = useState<Record<string, boolean>>({});
   const [success, setSuccess] = useState<Record<string, boolean>>({});
   const [search, setSearch] = useState("");
+  const [bulkUploading, setBulkUploading] = useState(false);
+  const [bulkProgress, setBulkProgress] = useState({ done: 0, total: 0 });
   const fileInputs = useRef<Record<string, HTMLInputElement | null>>({});
+  const bulkInputRef = useRef<HTMLInputElement | null>(null);
 
   useEffect(() => {
     if (!auth) return;
@@ -166,6 +169,51 @@ export default function Admin() {
     reader.readAsDataURL(file);
   };
 
+  const handleBulkUpload = async (files: FileList) => {
+    const allItems = menuData.flatMap(cat => cat.items.map(item => ({ ...item })));
+    const matched: { code: string; file: File }[] = [];
+
+    for (let i = 0; i < files.length; i++) {
+      const file = files[i];
+      const namePart = file.name.replace(/\.[^.]+$/, "").toLowerCase();
+      const item = allItems.find(it =>
+        it.code.toLowerCase() === namePart ||
+        it.name.toLowerCase() === namePart
+      );
+      if (item) matched.push({ code: item.code, file });
+    }
+
+    if (matched.length === 0) {
+      alert("Не найдено совпадений. Назовите файлы по коду блюда, например: 1-01.jpg, 2-03.jpg");
+      return;
+    }
+
+    setBulkUploading(true);
+    setBulkProgress({ done: 0, total: matched.length });
+
+    for (let i = 0; i < matched.length; i++) {
+      const { code, file } = matched[i];
+      await new Promise<void>(resolve => {
+        const reader = new FileReader();
+        reader.onload = async (e) => {
+          const base64 = (e.target?.result as string).split(",")[1];
+          const res = await fetch(UPLOAD_URL, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ code, image: base64, content_type: file.type }),
+          });
+          const data = await res.json();
+          if (data.url) setImages(prev => ({ ...prev, [code]: data.url }));
+          setBulkProgress({ done: i + 1, total: matched.length });
+          resolve();
+        };
+        reader.readAsDataURL(file);
+      });
+    }
+
+    setBulkUploading(false);
+  };
+
   const allItems = menuData.flatMap(cat =>
     cat.items.map(item => ({ ...item, category: cat.category }))
   );
@@ -183,8 +231,24 @@ export default function Admin() {
           <div style={{ fontSize: "22px", fontWeight: 800, letterSpacing: "0.05em" }}>СЕЗОН — Загрузка фото</div>
           <div style={{ color: "#aaa", fontSize: "13px", marginTop: "4px" }}>Загружено {uploaded} из {total} блюд</div>
         </div>
-        <div style={{ display: "flex", gap: "16px", alignItems: "center" }}>
+        <div style={{ display: "flex", gap: "12px", alignItems: "center" }}>
           <a href="/" style={{ color: "#aaa", fontSize: "13px", textDecoration: "none" }}>← На сайт</a>
+          <input
+            type="file"
+            accept="image/*"
+            multiple
+            ref={bulkInputRef}
+            style={{ display: "none" }}
+            onChange={e => e.target.files && handleBulkUpload(e.target.files)}
+          />
+          <button
+            onClick={() => bulkInputRef.current?.click()}
+            disabled={bulkUploading}
+            style={{ background: bulkUploading ? "#333" : "#c8372d", border: "none", color: "white", fontSize: "13px", fontWeight: 700, padding: "8px 18px", cursor: bulkUploading ? "not-allowed" : "pointer", display: "flex", alignItems: "center", gap: "6px" }}
+          >
+            <Icon name="UploadCloud" size={15} />
+            {bulkUploading ? `Загружаю ${bulkProgress.done}/${bulkProgress.total}...` : "Загрузить все сразу"}
+          </button>
           <button
             onClick={() => { sessionStorage.removeItem("admin_ok"); setAuth(false); }}
             style={{ background: "transparent", border: "1px solid #555", color: "#aaa", fontSize: "13px", padding: "6px 14px", cursor: "pointer" }}
