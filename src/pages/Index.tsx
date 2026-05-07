@@ -456,71 +456,68 @@ export default function Index() {
                 }}>
                   {cat.category}
                 </h3>
-                <table style={{ width: "100%", borderCollapse: "collapse" }}>
-                  <tbody>
-                    {cat.items.map((item, idx) => (
-                      <tr
-                        key={item.code}
-                        style={{
-                          borderBottom: "1px solid #e5e5e5",
-                          background: idx % 2 === 0 ? "white" : "#fafafa",
-                        }}
-                      >
-                        <td style={{ padding: "8px 8px 8px 0", width: "56px" }}>
-                          {dishImages[item.code] ? (
-                            <img src={dishImages[item.code]} alt={item.name} style={{ width: "52px", height: "52px", objectFit: "cover", display: "block" }} />
-                          ) : (
-                            <div style={{ width: "52px", height: "52px", background: "#f0f0f0", display: "flex", alignItems: "center", justifyContent: "center" }}>
-                              <Icon name="UtensilsCrossed" size={18} />
-                            </div>
-                          )}
-                        </td>
-                        <td style={{ padding: "12px 8px", color: "#999", fontSize: "12px", fontWeight: 700, width: "60px" }}>
-                          {item.code}
-                        </td>
-                        <td style={{ padding: "12px 8px", fontWeight: 600, fontSize: "15px" }}>
-                          {item.name}
-                        </td>
-                        <td style={{ padding: "12px 8px", color: "#888", fontSize: "13px", textAlign: "right", whiteSpace: "nowrap" }}>
-                          {item.weight}
-                        </td>
-                        <td style={{ padding: "12px 8px 12px 20px", textAlign: "right", whiteSpace: "nowrap" }}>
-                          <span className="price" style={{ fontSize: "18px" }}>{item.price} ₽</span>
-                        </td>
-                        <td style={{ padding: "12px 0 12px 12px", textAlign: "right", whiteSpace: "nowrap" }}>
-                          <button
-                            onClick={() => { addToCart(item); setCartOpen(true); }}
-                            style={{
-                              padding: "6px 14px",
-                              background: "var(--primary)",
-                              color: "white",
-                              fontWeight: 800,
-                              fontSize: "12px",
-                              textTransform: "uppercase",
-                              border: "2px solid var(--primary)",
-                              cursor: "pointer",
-                              transition: "0.2s",
-                              display: "inline-flex",
-                              alignItems: "center",
-                              gap: "5px",
-                            }}
-                            onMouseEnter={e => {
-                              (e.currentTarget as HTMLButtonElement).style.background = "white";
-                              (e.currentTarget as HTMLButtonElement).style.color = "var(--primary)";
-                            }}
-                            onMouseLeave={e => {
-                              (e.currentTarget as HTMLButtonElement).style.background = "var(--primary)";
-                              (e.currentTarget as HTMLButtonElement).style.color = "white";
-                            }}
-                          >
-                            <Icon name="Plus" size={13} />
-                            В корзину
-                          </button>
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
+                <div>
+                  {cat.items.map((item, idx) => (
+                    <div
+                      key={item.code}
+                      style={{
+                        borderBottom: "1px solid #e5e5e5",
+                        background: idx % 2 === 0 ? "white" : "#fafafa",
+                        display: "flex",
+                        alignItems: "center",
+                        gap: "12px",
+                        padding: "8px 0",
+                      }}
+                    >
+                      <div style={{ flexShrink: 0 }}>
+                        {dishImages[item.code] ? (
+                          <img src={dishImages[item.code]} alt={item.name} style={{ width: "64px", height: "64px", objectFit: "cover", display: "block" }} />
+                        ) : (
+                          <div style={{ width: "64px", height: "64px", background: "#f0f0f0", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                            <Icon name="UtensilsCrossed" size={18} />
+                          </div>
+                        )}
+                      </div>
+                      <div style={{ flex: 1, minWidth: 0 }}>
+                        <div style={{ color: "#999", fontSize: "11px", fontWeight: 700, marginBottom: "2px" }}>{item.code}</div>
+                        <div style={{ fontWeight: 600, fontSize: "15px", lineHeight: 1.3 }}>{item.name}</div>
+                        <div style={{ color: "#888", fontSize: "12px", marginTop: "2px" }}>{item.weight}</div>
+                      </div>
+                      <div style={{ flexShrink: 0, display: "flex", flexDirection: "column", alignItems: "flex-end", gap: "6px" }}>
+                        <span className="price" style={{ fontSize: "17px", fontWeight: 700 }}>{item.price} ₽</span>
+                        <button
+                          onClick={() => { addToCart(item); setCartOpen(true); }}
+                          style={{
+                            padding: "6px 12px",
+                            background: "var(--primary)",
+                            color: "white",
+                            fontWeight: 800,
+                            fontSize: "12px",
+                            textTransform: "uppercase",
+                            border: "2px solid var(--primary)",
+                            cursor: "pointer",
+                            transition: "0.2s",
+                            display: "inline-flex",
+                            alignItems: "center",
+                            gap: "5px",
+                            whiteSpace: "nowrap",
+                          }}
+                          onMouseEnter={e => {
+                            (e.currentTarget as HTMLButtonElement).style.background = "white";
+                            (e.currentTarget as HTMLButtonElement).style.color = "var(--primary)";
+                          }}
+                          onMouseLeave={e => {
+                            (e.currentTarget as HTMLButtonElement).style.background = "var(--primary)";
+                            (e.currentTarget as HTMLButtonElement).style.color = "white";
+                          }}
+                        >
+                          <Icon name="Plus" size={13} />
+                          В корзину
+                        </button>
+                      </div>
+                    </div>
+                  ))}
+                </div>
               </div>
             ))}
           </div>
