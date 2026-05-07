@@ -601,6 +601,12 @@ export default function Index() {
               Написать в Telegram
             </a>
           </div>
+          <div style={{ marginTop: "20px", background: "white", border: "var(--border)", borderLeft: "4px solid var(--primary)", padding: "16px 20px", display: "inline-flex", alignItems: "center", gap: "12px" }}>
+            <Icon name="Phone" size={20} />
+            <p style={{ fontSize: "15px", color: "#333", margin: 0 }}>
+              Если Telegram у вас нет — звоните <a href="tel:+79500736888" style={{ fontWeight: 800, color: "var(--primary)", textDecoration: "none" }}>8 950 073-68-88</a> и заказывайте
+            </p>
+          </div>
         </section>
 
         <section className="section-padding">
