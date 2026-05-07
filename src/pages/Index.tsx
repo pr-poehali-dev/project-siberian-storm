@@ -546,6 +546,7 @@ export default function Index() {
               {[
                 { icon: "MapPin", title: "Адрес", text: "мкрн Университетский, 43" },
                 { icon: "Phone", title: "Телефон", text: "+7 950 073-68-88", href: "tel:+79500736888" },
+                { icon: "Clock", title: "Режим работы", text: "Ежедневно с 10:00 до 23:00" },
                 { icon: "Users", title: "Залы", text: "VIP-зал, общий зал, зал для банкетов" },
                 { icon: "UtensilsCrossed", title: "Кухня", text: "Настоящая китайская кухня — живой огонь, вок, свежие ингредиенты" },
               ].map((card) => (
