@@ -183,6 +183,17 @@ export default function Index() {
     <>
       <div className="grain-overlay" />
 
+      <div style={{ background: "var(--dark)", color: "#aaa", fontSize: "13px", textAlign: "center", padding: "8px 16px", display: "flex", justifyContent: "center", alignItems: "center", gap: "16px", flexWrap: "wrap" }}>
+        <span style={{ display: "flex", alignItems: "center", gap: "6px" }}>
+          <Icon name="Clock" size={13} />
+          Ежедневно с 10:00 до 23:00
+        </span>
+        <span style={{ color: "#555" }}>|</span>
+        <a href="tel:+79500736888" style={{ color: "#aaa", textDecoration: "none", display: "flex", alignItems: "center", gap: "6px" }}>
+          <Icon name="Phone" size={13} />
+          8 950 073-68-88
+        </a>
+      </div>
       <header className="header">
         <div className="logo">СЕЗОН</div>
         <nav>
