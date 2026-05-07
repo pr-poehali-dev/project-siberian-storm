@@ -101,6 +101,7 @@ export default function Admin() {
   const [search, setSearch] = useState("");
   const [bulkUploading, setBulkUploading] = useState(false);
   const [bulkProgress, setBulkProgress] = useState({ done: 0, total: 0 });
+  const [filterMissing, setFilterMissing] = useState(false);
   const fileInputs = useRef<Record<string, HTMLInputElement | null>>({});
   const bulkInputRef = useRef<HTMLInputElement | null>(null);
 
@@ -217,9 +218,11 @@ export default function Admin() {
   const allItems = menuData.flatMap(cat =>
     cat.items.map(item => ({ ...item, category: cat.category }))
   );
-  const filtered = search
-    ? allItems.filter(i => i.name.toLowerCase().includes(search.toLowerCase()) || i.code.includes(search))
-    : allItems;
+  const filtered = allItems.filter(i => {
+    if (filterMissing) return !images[i.code];
+    if (search) return i.name.toLowerCase().includes(search.toLowerCase()) || i.code.includes(search);
+    return true;
+  });
 
   const uploaded = Object.keys(images).length;
   const total = allItems.length;
@@ -259,10 +262,34 @@ export default function Admin() {
       </div>
 
       <div style={{ maxWidth: "960px", margin: "0 auto", padding: "32px 16px" }}>
+        <div style={{ marginBottom: "16px", display: "flex", gap: "12px", flexWrap: "wrap", alignItems: "center" }}>
+          <div style={{ background: "#22c55e", color: "white", padding: "6px 14px", fontSize: "13px", fontWeight: 700, borderRadius: "4px" }}>
+            ✓ Загружено: {uploaded}
+          </div>
+          <div style={{ background: "#c8372d", color: "white", padding: "6px 14px", fontSize: "13px", fontWeight: 700, borderRadius: "4px" }}>
+            ✗ Без фото: {total - uploaded}
+          </div>
+        </div>
+
+        <div style={{ marginBottom: "16px", display: "flex", gap: "8px" }}>
+          <button
+            onClick={() => { setSearch(""); setFilterMissing(false); }}
+            style={{ padding: "8px 16px", background: !filterMissing ? "#111" : "#e5e5e5", color: !filterMissing ? "white" : "#333", border: "none", fontWeight: 700, fontSize: "13px", cursor: "pointer" }}
+          >
+            Все ({total})
+          </button>
+          <button
+            onClick={() => { setSearch(""); setFilterMissing(true); }}
+            style={{ padding: "8px 16px", background: filterMissing ? "#c8372d" : "#e5e5e5", color: filterMissing ? "white" : "#333", border: "none", fontWeight: 700, fontSize: "13px", cursor: "pointer" }}
+          >
+            Без фото ({total - uploaded})
+          </button>
+        </div>
+
         <div style={{ marginBottom: "24px", position: "relative" }}>
           <input
             value={search}
-            onChange={e => setSearch(e.target.value)}
+            onChange={e => { setSearch(e.target.value); setFilterMissing(false); }}
             placeholder="Поиск по названию или коду..."
             style={{ width: "100%", padding: "12px 16px 12px 44px", border: "2px solid #ddd", fontSize: "15px", outline: "none", boxSizing: "border-box", background: "white" }}
           />
@@ -271,7 +298,10 @@ export default function Admin() {
 
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))", gap: "16px" }}>
           {filtered.map(item => (
-            <div key={item.code} style={{ background: "white", border: "2px solid #e5e5e5", padding: "16px", position: "relative" }}>
+            <div key={item.code} style={{ background: "white", border: `2px solid ${images[item.code] ? "#22c55e" : "#e5e5e5"}`, padding: "16px", position: "relative" }}>
+              <div style={{ position: "absolute", top: "10px", right: "10px", background: images[item.code] ? "#22c55e" : "#c8372d", color: "white", fontSize: "11px", fontWeight: 700, padding: "2px 8px", borderRadius: "4px" }}>
+                {images[item.code] ? "✓ есть" : "✗ нет"}
+              </div>
               {images[item.code] ? (
                 <img
                   src={images[item.code]}
